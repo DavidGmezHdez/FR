@@ -18,13 +18,16 @@ public class YodafyServidorIterativo {
 		byte []buffer=new byte[256];
 		// Número de bytes leídos
 		int bytesLeidos=0;
-		
+
+		ServerSocket serverSocket = null;
+		Socket socketServicio = null;
+
 		try {
 			// Abrimos el socket en modo pasivo, escuchando el en puerto indicado por "port"
 			//////////////////////////////////////////////////
 			// ...serverSocket=... (completar)
 			//////////////////////////////////////////////////
-			
+			serverSocket = new ServerSocket(port);
 			// Mientras ... siempre!
 			do {
 				
@@ -32,7 +35,11 @@ public class YodafyServidorIterativo {
 				/////////////////////////////////////////////////
 				// socketServicio=... (completar)
 				//////////////////////////////////////////////////
-				
+				try{
+					socketServicio = serverSocket.accept();
+				} catch (IOException e) {
+					System.err.println("Error en la conexión.");
+				}
 				// Creamos un objeto de la clase ProcesadorYodafy, pasándole como 
 				// argumento el nuevo socket, para que realice el procesamiento
 				// Este esquema permite que se puedan usar hebras más fácilmente.
