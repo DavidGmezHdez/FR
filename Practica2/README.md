@@ -4,6 +4,6 @@
 
 - [x] Modifique el servidor anterior para que funcionen como servidor TCP concurrente.
 
-- [ ] Modifique `<servicio>ServidorIterativo.java` y `<servicio>Cliente.java` para que usen datagramas UDP.
+- [x] Modifique `<servicio>ServidorIterativo.java` y `<servicio>Cliente.java` para que usen datagramas UDP.
 
 - [ ] Creación y definición un protocolo de aplicación basado en el paradigma cliente-servidor. Para ello remítase a las instrucciones del entregable correspondiente disponible en la página web de la asignatura.

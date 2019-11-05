@@ -17,13 +17,15 @@ import java.util.Random;
 public class ProcesadorYodafy {
 	// Referencia a un socket para enviar/recibir las peticiones/respuestas
 	private DatagramSocket socketServicio;
+	private DatagramPacket paquete;
 	
 	// Para que la respuesta sea siempre diferente, usamos un generador de números aleatorios.
 	private Random random;
 	
 	// Constructor que tiene como parámetro una referencia al socket abierto en por otra clase
-	public ProcesadorYodafy(DatagramSocket socketServicio) {
+	public ProcesadorYodafy(DatagramSocket socketServicio, DatagramPacket paquete) {
 		this.socketServicio=socketServicio;
+		this.paquete = paquete;
 		random=new Random();
 	}
 	
@@ -40,8 +42,6 @@ public class ProcesadorYodafy {
 		
 		try {
 
-			DatagramPacket paquete = new DatagramPacket(datosRecibidos, datosRecibidos.length);
-			socketServicio.receive(paquete);
 			datosRecibidos = paquete.getData();
 
 			// Yoda hace su magia:

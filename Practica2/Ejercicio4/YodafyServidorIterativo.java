@@ -28,16 +28,16 @@ public class YodafyServidorIterativo {
 			// ...serverSocket=... (completar)
 			//////////////////////////////////////////////////
 			serverSocket = new DatagramSocket(port);
-			paquete = new DatagramPacket(buffer, buffer.length);
+			
 			// Mientras ... siempre!
 			do {
-				
+				paquete = new DatagramPacket(buffer, buffer.length);
 				// Aceptamos una nueva conexión con accept()
 				/////////////////////////////////////////////////
 				// socketServicio=... (completar)
 				//////////////////////////////////////////////////
 				serverSocket.receive(paquete);
-				Hebra h = new Hebra(serverSocket);
+				Hebra h = new Hebra(serverSocket, paquete);
 				h.start();
 				
 			} while (true);
