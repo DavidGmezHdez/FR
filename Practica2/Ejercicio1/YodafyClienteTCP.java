@@ -53,7 +53,7 @@ public class YodafyClienteTCP {
 			//////////////////////////////////////////////////////
 			// ... .flush(); (Completar)
 			//////////////////////////////////////////////////////
-			// outputStream.flush();
+			outputStream.flush();
 
 			// Leemos la respuesta del servidor. Para ello le pasamos un array de bytes, que intentará
 			// rellenar. El método "read(...)" devolverá el número de bytes leídos.

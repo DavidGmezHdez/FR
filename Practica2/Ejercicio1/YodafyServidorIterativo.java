@@ -35,11 +35,7 @@ public class YodafyServidorIterativo {
 				/////////////////////////////////////////////////
 				// socketServicio=... (completar)
 				//////////////////////////////////////////////////
-				try{
-					socketServicio = serverSocket.accept();
-				} catch (IOException e) {
-					System.err.println("Error en la conexión.");
-				}
+				socketServicio = serverSocket.accept();
 				// Creamos un objeto de la clase ProcesadorYodafy, pasándole como 
 				// argumento el nuevo socket, para que realice el procesamiento
 				// Este esquema permite que se puedan usar hebras más fácilmente.

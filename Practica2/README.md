@@ -1,4 +1,4 @@
-- [ ] Rellene los huecos de los ficheros `<servicio>ServidorIterativo.java` y `<servicio>Cliente.java` para que funcionen como cliente/servidor TCP iterativo.
+- [x] Rellene los huecos de los ficheros `<servicio>ServidorIterativo.java` y `<servicio>Cliente.java` para que funcionen como cliente/servidor TCP iterativo.
 
 - [ ] Modifique el cliente y servidor anteriores para utilicen las clases PrintWriter y BufferedReader.
 
