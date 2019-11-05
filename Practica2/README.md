@@ -2,7 +2,7 @@
 
 - [x] Modifique el cliente y servidor anteriores para utilicen las clases PrintWriter y BufferedReader.
 
-- [] Modifique el servidor anterior para que funcionen como servidor TCP concurrente.
+- [x] Modifique el servidor anterior para que funcionen como servidor TCP concurrente.
 
 - [ ] Modifique `<servicio>ServidorIterativo.java` y `<servicio>Cliente.java` para que usen datagramas UDP.
 
