@@ -1,13 +1,14 @@
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 
 //
 // YodafyServidorIterativo
 // (CC) jjramos, 2012
 //
+
 public class YodafyServidorIterativo {
 
 	public static void main(String[] args) {
@@ -18,13 +19,16 @@ public class YodafyServidorIterativo {
 		byte []buffer=new byte[256];
 		// Número de bytes leídos
 		int bytesLeidos=0;
-		
+		DatagramPacket paquete;
+		DatagramSocket serverSocket = null;
+
 		try {
 			// Abrimos el socket en modo pasivo, escuchando el en puerto indicado por "port"
 			//////////////////////////////////////////////////
 			// ...serverSocket=... (completar)
 			//////////////////////////////////////////////////
-			
+			serverSocket = new DatagramSocket(port);
+			paquete = new DatagramPacket(buffer, buffer.length);
 			// Mientras ... siempre!
 			do {
 				
@@ -32,18 +36,17 @@ public class YodafyServidorIterativo {
 				/////////////////////////////////////////////////
 				// socketServicio=... (completar)
 				//////////////////////////////////////////////////
-				
-				// Creamos un objeto de la clase ProcesadorYodafy, pasándole como 
-				// argumento el nuevo socket, para que realice el procesamiento
-				// Este esquema permite que se puedan usar hebras más fácilmente.
-				ProcesadorYodafy procesador=new ProcesadorYodafy(socketServicio);
-				procesador.procesa();
+				serverSocket.receive(paquete);
+				Hebra h = new Hebra(serverSocket);
+				h.start();
 				
 			} while (true);
 			
 		} catch (IOException e) {
 			System.err.println("Error al escuchar en el puerto "+port);
 		}
+		buffer = new byte[256];
+		serverSocket.close();
 
 	}
 
