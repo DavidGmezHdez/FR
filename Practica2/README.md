@@ -1,6 +1,6 @@
 - [x] Rellene los huecos de los ficheros `<servicio>ServidorIterativo.java` y `<servicio>Cliente.java` para que funcionen como cliente/servidor TCP iterativo.
 
-- [ ] Modifique el cliente y servidor anteriores para utilicen las clases PrintWriter y BufferedReader.
+- [x] Modifique el cliente y servidor anteriores para utilicen las clases PrintWriter y BufferedReader.
 
 - [ ] Modifique el servidor anterior para que funcionen como servidor TCP concurrente.
 
