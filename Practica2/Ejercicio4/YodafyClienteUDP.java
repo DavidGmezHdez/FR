@@ -21,12 +21,13 @@ public class YodafyClienteUDP {
 		try {
 			// Nombre del host donde se ejecuta el servidor:
 			// String host="localhost";
-			// Puerto en el que espera el servidor:
+			
 			DatagramSocket socketServicio=null;
 
 			byte[] buferEnvio = new byte[256];
 			byte[] buferRecibo = new byte[256];
-
+			
+			// Puerto en el que espera el servidor:
 			int port=8989;
 			InetAddress direccion = InetAddress.getByName("localhost");
 

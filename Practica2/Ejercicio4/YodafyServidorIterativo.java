@@ -23,19 +23,12 @@ public class YodafyServidorIterativo {
 		DatagramSocket serverSocket = null;
 
 		try {
-			// Abrimos el socket en modo pasivo, escuchando el en puerto indicado por "port"
-			//////////////////////////////////////////////////
-			// ...serverSocket=... (completar)
-			//////////////////////////////////////////////////
 			serverSocket = new DatagramSocket(port);
 			
 			// Mientras ... siempre!
 			do {
 				paquete = new DatagramPacket(buffer, buffer.length);
-				// Aceptamos una nueva conexión con accept()
-				/////////////////////////////////////////////////
-				// socketServicio=... (completar)
-				//////////////////////////////////////////////////
+
 				serverSocket.receive(paquete);
 				Hebra h = new Hebra(serverSocket, paquete);
 				h.start();
