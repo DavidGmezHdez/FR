@@ -34,7 +34,7 @@ public class Procesador {
 	byte [] datosRecibidos=new byte[1024];
 		
 	// Array de bytes para enviar la respuesta. Podemos reservar memoria cuando vayamos a enviarla:
-	byte [] datosEnviar;
+	byte [] datosEnviar=new byte[1024];
 
 	// Archivos
 	File carpetaActual = new File("files/.");	//Cambiar ruta de archivos
@@ -45,8 +45,6 @@ public class Procesador {
 	public Procesador(Socket socketServicio) {
 		this.socketServicio=socketServicio;
 	}
-
-	public Procesador() {}
 	
 	// Aquí es donde se realiza el procesamiento realmente:
 	void procesa(){
@@ -67,17 +65,17 @@ public class Procesador {
 				respuesta = archivosS;
 				datosEnviar=respuesta.getBytes();
 				outputStream.write(datosEnviar,0,datosEnviar.length);
+				outputStream.flush();
 			}
 			else{
-				// Enviar un archivo
-				// System.err.println("Enviando...");
-				// File myFile = new File("files/aaa");
-				// datosEnviar = new byte[(int) myFile.length() + 1];
-				// FileInputStream fis = new FileInputStream(myFile);
-				// BufferedInputStream bis = new BufferedInputStream(fis);
-				// // datosEnviar = bout.toByteArray();
+				
+				// Enviamos el nombre			
+				datosEnviar=archivos[integ].getBytes();
+				outputStream.write(datosEnviar,0,datosEnviar.length);
+				outputStream.flush();
+
+				//Enviamos el archivo
 				try{
-					//System.out.println("Enviando...");
 					enviar(outputStream,integ);
 				}catch(Exception e){
 					System.err.println("Error al enviar.");
@@ -102,12 +100,12 @@ public class Procesador {
 	}
 
 	public void enviar(OutputStream os,int i) throws Exception{
-		File archivo = new File("./files/aaa");
+		File archivo = new File("files/" + archivos[i]);
 		datosEnviar = new byte[(int)archivo.length()];
 		FileInputStream archivoEnviar = new FileInputStream(archivo);
 		BufferedInputStream bis = new BufferedInputStream(archivoEnviar);
 		bis.read(datosEnviar,0,datosEnviar.length);
-		System.out.println("Enviando...");
+		System.out.println("Enviando " + archivos[i]);
 		os.write(datosEnviar,0,datosEnviar.length);
 		os.flush();
 	}
@@ -117,12 +115,6 @@ public class Procesador {
 		BufferedOutputStream bos = new BufferedOutputStream(archivoRecibir);
 		int bytesLeidos = is.read(datosRecibidos,0,datosRecibidos.length());
 		int actual = bytesLeidos;
-
-		do{
-			bytesLeidos = is.read(datosRecibidos,actual,datosRecibidos.length()-actual);
-			if(bytesLeidos >= 0)
-				actual += bytesLeidos;
-		} while(bytesLeidos>-1);
 		bos.write(datosRecibidos,0,actual);
 		bos.flush();
 		bos.close();

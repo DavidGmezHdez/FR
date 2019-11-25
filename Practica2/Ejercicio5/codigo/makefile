@@ -3,3 +3,6 @@ all : Procesador.java Cliente.java ServidorIterativo.java Hebra.java
 
 clean :
 	rm -r *.class
+
+cleanArchivos:
+	rm -r ejemplo*

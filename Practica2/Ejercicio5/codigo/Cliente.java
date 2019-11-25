@@ -18,6 +18,7 @@ import java.util.Random;
 
 public class Cliente {
 
+	public static String nombreArchivo;
 	public static void main(String[] args) {
 
 		try {
@@ -42,7 +43,6 @@ public class Cliente {
 				// LISTADO DE ARCHIVOS
 				socketServicio = new Socket(host,port);
 
-				
 				OutputStream outputStream = socketServicio.getOutputStream();
 				InputStream inputStream = socketServicio.getInputStream();
 
@@ -61,14 +61,35 @@ public class Cliente {
 				for(int i=0;i<bytesLeidos;i++){
 					System.out.print((char)buferRecibo[i]);
 				}
-
+				
 				socketServicio.close();
+				
+				// Recibir nombre
 				socketServicio = new Socket(host,port);
-
 				outputStream = socketServicio.getOutputStream();
 				inputStream = socketServicio.getInputStream();
 
-				//DESCARGAR ARCHIVOS
+				// // PrintWriter outPrinter = new PrintWriter(outputStream,true);
+				// // bytesRecibidos = inputStream.read(datosRecibidos);
+				// // outPrinter.println(buferEnvio);
+
+				//DataInputStream dis = new DataInputStream(inputStream);
+				
+				
+				bytesLeidos = inputStream.read(buferRecibo);
+				nombreArchivo = new String(buferRecibo,0,bytesLeidos);
+				//System.out.println("aaa");
+				
+				//BufferedReader inReader = new BufferedReader(new InputStreamReader(inputStream));
+				//nombreArchivo = inReader.readLine();
+				//System.out.println("aaa");
+				socketServicio.close();
+				
+				//DESCARGAR ARCHIVO
+				socketServicio = new Socket(host,port);
+				outputStream = socketServicio.getOutputStream();
+				inputStream = socketServicio.getInputStream();
+
 				int accionArchivo = reader.nextInt();
 				bout = new ByteArrayOutputStream();
 				dataOut = new DataOutputStream(bout);
@@ -81,32 +102,8 @@ public class Cliente {
 				}catch(Exception e){
 					System.err.println("Error al recibir.");
 				}
-
 				socketServicio.close();
-				
-				// Envío
-				// socketServicio = new DatagramSocket();
-				// bout = new ByteArrayOutputStream();
-				// dataOut = new DataOutputStream(bout);
-				// dataOut.writeInt(accion);
-				// buferEnvio = bout.toByteArray();
-				// paquete = new DatagramPacket(buferEnvio, buferEnvio.length, direccion, port);
-				// socketServicio.send(paquete);
 
-				// System.out.println("Recibiendo archivo...");
-				// // Recibimiento
-				// paquete = new DatagramPacket(buferRecibo, buferRecibo.length);
-				// socketServicio.receive(paquete);
-				// buferRecibo = paquete.getData();
-				// ByteArrayInputStream bin = new ByteArrayInputStream(paquete.getData());
-				// FileInputStream dataIn = new FileInputStream(bin.toString());
-				// socketServicio.close();
-
-				// System.out.println("0. Salir\n1. Ver los archivos listados\n2. Descargar un archivo\n-----------");
-				// System.out.println("¿Qué acción quiere realizar?: ");
-				// 
-
-			//}while(!salida);
 		} catch (UnknownHostException e) {
 			System.err.println("Error: Nombre de host no encontrado.");
 		} catch (IOException e) {
@@ -117,20 +114,13 @@ public class Cliente {
 
 	public static void recibir(InputStream is) throws Exception{
 		byte[] datosRecibidos = new byte[6022386];
-		Random random = new Random();
-		FileOutputStream archivoRecibir = new FileOutputStream("ejemplo" + random.nextInt(50));
+		FileOutputStream archivoRecibir = new FileOutputStream(nombreArchivo);
 		BufferedOutputStream bos = new BufferedOutputStream(archivoRecibir);
 		int bytesLeidos = is.read(datosRecibidos,0,datosRecibidos.length);
 		int actual = bytesLeidos;
-		System.out.println("Recibiendo: ejemplo" + random.nextInt(50));
-		do{
-			bytesLeidos = is.read(datosRecibidos,actual,datosRecibidos.length-actual);
-			if(bytesLeidos >= 0)
-				actual += bytesLeidos;
-			System.out.println("a");
-		} while(bytesLeidos>-1);
+		System.out.println("Recibiendo archivo: " + nombreArchivo);
 		bos.write(datosRecibidos,0,actual);
 		bos.flush();
-		// bos.close();
+		bos.close();
 	}
 }
