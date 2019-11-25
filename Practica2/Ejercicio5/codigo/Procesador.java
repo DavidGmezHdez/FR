@@ -34,12 +34,12 @@ public class Procesador {
 	byte [] datosRecibidos=new byte[1024];
 		
 	// Array de bytes para enviar la respuesta. Podemos reservar memoria cuando vayamos a enviarla:
-	byte [] datosEnviar=new byte[1024];
+	byte [] datosEnviar;
 
 	// Archivos
-	File carpetaActual = new File("files/.");	//Cambiar ruta de archivos
-	String[] archivos = carpetaActual.list();
-	String archivosS = crearLista(archivos);
+	File carpetaActual = new File("files/.");	// Ruta de archivos
+	String[] archivos = carpetaActual.list();	// Lista de nombres de archivos
+	String archivosS = crearLista(archivos);	// Lisa creada como String con números para enviar al cliente
 	
 	// Constructor que tiene como parámetro una referencia al socket abierto en por otra clase
 	public Procesador(Socket socketServicio) {
@@ -52,35 +52,39 @@ public class Procesador {
 			inputStream=socketServicio.getInputStream();
 			outputStream=socketServicio.getOutputStream();
 
+			// Leemos el entero que nos envían
+			// Si es -1 -> listaremos los archivos
+			// Si es otro entero -> Enviamos ese archivo
 			inputStream.read(datosRecibidos);
-
 			ByteArrayInputStream bin = new ByteArrayInputStream(datosRecibidos);
 			DataInputStream dataIn = new DataInputStream(bin);
 			int integ = dataIn.readInt();
-			int accion = 0;
-			// Creamos un String a partir de un array de bytes de tamaño "bytesRecibidos":
-			String peticion=new String(datosRecibidos,0,datosRecibidos.length);
+
 			String respuesta="";
 			if(integ == -1){
+				// Enviamos la lista de archivos
 				respuesta = archivosS;
 				datosEnviar=respuesta.getBytes();
 				outputStream.write(datosEnviar,0,datosEnviar.length);
 				outputStream.flush();
 			}
-			else{
-				
-				// Enviamos el nombre			
-				datosEnviar=archivos[integ].getBytes();
-				outputStream.write(datosEnviar,0,datosEnviar.length);
-				outputStream.flush();
+			else if(integ <= archivos.length){	
+				// Envío del nombre de archivo elegido por el usuario	
+				PrintWriter outPrinter = new PrintWriter(outputStream,true);
+				outPrinter.println(archivos[integ]);
 
 				//Enviamos el archivo
 				try{
 					enviar(outputStream,integ);
 				}catch(Exception e){
-					System.err.println("Error al enviar.");
+					System.err.println("Error al enviar");
 				}
 			}		
+			else{
+				// Cierra la conexión por que no se han indicado un archivo válido
+				socketServicio.close();
+				System.err.println("Archivo no válido");
+			}
 			
 			
 		} catch (IOException e) {
@@ -90,12 +94,14 @@ public class Procesador {
 	}
 
 	String crearLista( String[] arch){
-		String salida = "----------------\n" +" ¿Que archivos quieres?"+ "\n----------------\n";
+		String salida = "----------------"+"\n¿Qué archivos quieres?\n"+"----------------\n";
 		int contador = 0;
 		for(String i : arch){
 			salida += contador + ".- " + i + "\n";
 			contador++;
 		}
+		salida+="----------------";
+
 		return salida;
 	}
 

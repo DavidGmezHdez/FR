@@ -18,7 +18,7 @@ import java.util.Random;
 
 public class Cliente {
 
-	public static String nombreArchivo;
+	public static String nombreArchivo = "newFile";
 	public static void main(String[] args) {
 
 		try {
@@ -36,73 +36,62 @@ public class Cliente {
 			// InetAddress direccion = InetAddress.getByName("localhost");
 			boolean salida = false;
 			Scanner reader = new Scanner(System.in);
-			// System.out.println("0. Salir\n1. Ver los archivos listados\n2. Descargar un archivo\n-----------");
-			// System.out.println("¿Qué acción quiere realizar?: ");
-			// accion = reader.nextInt();
-			//do{
-				// LISTADO DE ARCHIVOS
-				socketServicio = new Socket(host,port);
 
-				OutputStream outputStream = socketServicio.getOutputStream();
-				InputStream inputStream = socketServicio.getInputStream();
+			// LISTADO DE ARCHIVOS
+			socketServicio = new Socket(host,port);
+			OutputStream outputStream = socketServicio.getOutputStream();
+			InputStream inputStream = socketServicio.getInputStream();
 
-				ByteArrayOutputStream bout = new ByteArrayOutputStream();
-				DataOutputStream dataOut = new DataOutputStream(bout);
-				dataOut.writeInt(accion);
-				buferEnvio = bout.toByteArray();
-				// Envío peticion primera
-				outputStream.write(buferEnvio, 0, buferEnvio.length);
-				outputStream.flush();
+			// Enviamos -1 para que el servidor sepa que nos tienen que 
+			// enviar la lista de archivos
+			ByteArrayOutputStream bout = new ByteArrayOutputStream();
+			DataOutputStream dataOut = new DataOutputStream(bout);
+			dataOut.writeInt(accion);
+			buferEnvio = bout.toByteArray();
 
-				int bytesLeidos = inputStream.read(buferRecibo);
+			// Envío peticion para listado de archivos
+			outputStream.write(buferEnvio, 0, buferEnvio.length);
+			outputStream.flush();
 
-				// Mostremos la cadena de caracteres recibidos:
-				System.out.println("Recibido: \n");
-				for(int i=0;i<bytesLeidos;i++){
-					System.out.print((char)buferRecibo[i]);
-				}
-				
-				socketServicio.close();
-				
-				// Recibir nombre
-				socketServicio = new Socket(host,port);
-				outputStream = socketServicio.getOutputStream();
-				inputStream = socketServicio.getInputStream();
+			// Recibimos la lista de archivos
+			int bytesLeidos = inputStream.read(buferRecibo);
+			String lista = new String(buferRecibo, 0, buferRecibo.length);
+			// Mostremos la cadena de caracteres recibidos:
+			// Lista de archivos
+			System.out.println(lista);
+			
+			socketServicio.close();
+			// Cerramos el socket para que la espera de selección
+			// de archivo sea en el cliente y no en el servidor
 
-				// // PrintWriter outPrinter = new PrintWriter(outputStream,true);
-				// // bytesRecibidos = inputStream.read(datosRecibidos);
-				// // outPrinter.println(buferEnvio);
+			// Recibir archivo
+			// Introduce el número que quiere
+			int accionArchivo = reader.nextInt();
+			
+			// Se inicia una nueva conexion
+			socketServicio = new Socket(host,port);
+			outputStream = socketServicio.getOutputStream();
+			inputStream = socketServicio.getInputStream();
 
-				//DataInputStream dis = new DataInputStream(inputStream);
-				
-				
-				bytesLeidos = inputStream.read(buferRecibo);
-				nombreArchivo = new String(buferRecibo,0,bytesLeidos);
-				//System.out.println("aaa");
-				
-				//BufferedReader inReader = new BufferedReader(new InputStreamReader(inputStream));
-				//nombreArchivo = inReader.readLine();
-				//System.out.println("aaa");
-				socketServicio.close();
-				
-				//DESCARGAR ARCHIVO
-				socketServicio = new Socket(host,port);
-				outputStream = socketServicio.getOutputStream();
-				inputStream = socketServicio.getInputStream();
+			// Se envía el número del archivo que quiere el cliente
+			bout = new ByteArrayOutputStream();
+			dataOut = new DataOutputStream(bout);
+			dataOut.writeInt(accionArchivo);
+			buferEnvio = bout.toByteArray();
+			outputStream.write(buferEnvio, 0, buferEnvio.length);
+			outputStream.flush();
 
-				int accionArchivo = reader.nextInt();
-				bout = new ByteArrayOutputStream();
-				dataOut = new DataOutputStream(bout);
-				dataOut.writeInt(accionArchivo);
-				buferEnvio = bout.toByteArray();
-				outputStream.write(buferEnvio, 0, buferEnvio.length);
-				outputStream.flush();
-				try{
-					recibir(inputStream);
-				}catch(Exception e){
-					System.err.println("Error al recibir.");
-				}
-				socketServicio.close();
+			// Se recibe el nombre del archivo
+			BufferedReader inReader = new BufferedReader(new InputStreamReader(inputStream));
+			nombreArchivo = inReader.readLine();
+
+			// Recibimos el archivo
+			try{
+				recibir(inputStream);
+			}catch(Exception e){
+				System.err.println("Error al recibir. Puede que el archivo indicado no sea válido");
+			}
+			socketServicio.close();
 
 		} catch (UnknownHostException e) {
 			System.err.println("Error: Nombre de host no encontrado.");
