@@ -104,12 +104,12 @@ public class Cliente {
 	public static void recibir(InputStream is) throws Exception{
 		byte[] datosRecibidos = new byte[6022386];
 		FileOutputStream archivoRecibir = new FileOutputStream(nombreArchivo);
-		BufferedOutputStream bos = new BufferedOutputStream(archivoRecibir);
+		BufferedOutputStream buffOutputStream = new BufferedOutputStream(archivoRecibir);
 		int bytesLeidos = is.read(datosRecibidos,0,datosRecibidos.length);
 		int actual = bytesLeidos;
 		System.out.println("Recibiendo archivo: " + nombreArchivo);
-		bos.write(datosRecibidos,0,actual);
-		bos.flush();
-		bos.close();
+		buffOutputStream.write(datosRecibidos,0,actual);
+		buffOutputStream.flush();
+		buffOutputStream.close();
 	}
 }

@@ -109,8 +109,8 @@ public class Procesador {
 		File archivo = new File("files/" + archivos[i]);
 		datosEnviar = new byte[(int)archivo.length()];
 		FileInputStream archivoEnviar = new FileInputStream(archivo);
-		BufferedInputStream bis = new BufferedInputStream(archivoEnviar);
-		bis.read(datosEnviar,0,datosEnviar.length);
+		BufferedInputStream buffInputStream = new BufferedInputStream(archivoEnviar);
+		buffInputStream.read(datosEnviar,0,datosEnviar.length);
 		System.out.println("Enviando " + archivos[i]);
 		os.write(datosEnviar,0,datosEnviar.length);
 		os.flush();
