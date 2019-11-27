@@ -44,7 +44,6 @@ public class YodafyClienteTCP {
 			//////////////////////////////////////////////////////
 			// ... .write ... (Completar)
 			//////////////////////////////////////////////////////
-			// outputStream.write(buferEnvio, 0, buferEnvio.length);
 			PrintWriter outPrinter = new PrintWriter(outputStream,true);
 			outPrinter.println(buferEnvio);
 
@@ -61,7 +60,6 @@ public class YodafyClienteTCP {
 			//////////////////////////////////////////////////////
 			// bytesLeidos ... .read... buferRecepcion ; (Completar)
 			//////////////////////////////////////////////////////
-			// bytesLeidos = inputStream.read(buferRecepcion);
 			BufferedReader inReader = new BufferedReader(new InputStreamReader(inputStream));
 			buferRecepcion = inReader.readLine();
 

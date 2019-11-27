@@ -7,10 +7,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Random;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.UnknownHostException;
 
 
 //
@@ -39,8 +35,8 @@ public class ProcesadorYodafy {
 	void procesa(){
 		
 		// Como máximo leeremos un bloque de 1024 bytes. Esto se puede modificar.
-		String datosRecibidos;
-		// int bytesRecibidos;
+		byte [] datosRecibidos=new byte[1024];
+		int bytesRecibidos=0;
 		
 		// Array de bytes para enviar la respuesta. Podemos reservar memoria cuando vayamos a enviarla:
 		byte [] datosEnviar;
@@ -55,19 +51,23 @@ public class ProcesadorYodafy {
 			////////////////////////////////////////////////////////
 			// read ... datosRecibidos.. (Completar)
 			////////////////////////////////////////////////////////
-			BufferedReader inReader = new BufferedReader(new InputStreamReader(inputStream));
-			datosRecibidos = inReader.readLine();
+			bytesRecibidos = inputStream.read(datosRecibidos);
 			
-			// Yoda hace su magia:			
+			// Yoda hace su magia:
+			// Creamos un String a partir de un array de bytes de tamaño "bytesRecibidos":
+			String peticion=new String(datosRecibidos,0,bytesRecibidos);
 			// Yoda reinterpreta el mensaje:
-			String respuesta=yodaDo(datosRecibidos);
+			String respuesta=yodaDo(peticion);
+			// Convertimos el String de respuesta en una array de bytes:
+			datosEnviar=respuesta.getBytes();
 			
 			// Enviamos la traducción de Yoda:
 			////////////////////////////////////////////////////////
 			// ... write ... datosEnviar... datosEnviar.length ... (Completar)
 			////////////////////////////////////////////////////////
-			PrintWriter outPrinter = new PrintWriter(outputStream,true);
-			outPrinter.println(respuesta);
+			outputStream.write(datosEnviar,0,datosEnviar.length);
+			
+			
 			
 		} catch (IOException e) {
 			System.err.println("Error al obtener los flujso de entrada/salida.");
