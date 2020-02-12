@@ -1,2 +1,2 @@
 # FR
-Prácticas FR Grado Ingeniería Informática 19/20
+Prácticas Fundamentos de Redes Grado Ingeniería Informática 19/20
